@@ -251,11 +251,15 @@ export default function App() {
             Firebase Not Configured
           </h1>
           <p className="text-zinc-400 text-sm leading-relaxed">
-            Your application's backend is not yet connected. Please use the <strong>Firebase Setup</strong> tool in the AI Studio Build settings to provision your database and authentication.
+            Your backend config is missing. Add your Firebase web app values to build environment variables
+            (<strong>VITE_FIREBASE_API_KEY</strong>, <strong>VITE_FIREBASE_AUTH_DOMAIN</strong>,
+            <strong>VITE_FIREBASE_PROJECT_ID</strong>, <strong>VITE_FIREBASE_STORAGE_BUCKET</strong>,
+            <strong>VITE_FIREBASE_MESSAGING_SENDER_ID</strong>, <strong>VITE_FIREBASE_APP_ID</strong>)
+            or fill <strong>firebase-applet-config.json</strong>.
           </p>
         </div>
         <div className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest bg-white/5 px-4 py-2 rounded-lg border border-white/5">
-          Error: auth/invalid-api-key
+          Error: missing Firebase config
         </div>
       </div>
     );

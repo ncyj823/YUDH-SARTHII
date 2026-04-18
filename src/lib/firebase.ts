@@ -4,8 +4,8 @@ import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
 
 import firebaseConfigRaw from '../../firebase-applet-config.json';
 
-// Default config from env vars
-let firebaseConfig: any = {
+// Prefer environment variables, then fallback to local JSON config.
+const firebaseConfig: any = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || firebaseConfigRaw.apiKey,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfigRaw.authDomain,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || firebaseConfigRaw.projectId,
@@ -15,15 +15,36 @@ let firebaseConfig: any = {
   databaseId: firebaseConfigRaw.firestoreDatabaseId
 };
 
-const isConfigValid = firebaseConfig.apiKey && firebaseConfig.apiKey !== 'undefined' && firebaseConfig.apiKey !== '';
+const requiredConfigKeys = [
+  'apiKey',
+  'authDomain',
+  'projectId',
+  'storageBucket',
+  'messagingSenderId',
+  'appId',
+] as const;
+
+const missingConfigKeys = requiredConfigKeys.filter((key) => {
+  const value = firebaseConfig[key];
+  return !value || value === 'undefined' || String(value).trim() === '';
+});
+
+const isConfigValid = missingConfigKeys.length === 0;
 
 if (!isConfigValid) {
-  console.error("Firebase API Key is missing or invalid. Please set up Firebase in the AI Studio Build settings or provide environment variables.");
+  console.error(
+    `Firebase config is incomplete. Missing keys: ${missingConfigKeys.join(', ')}. ` +
+      'Set VITE_FIREBASE_* environment variables or fill firebase-applet-config.json.'
+  );
 }
 
 const app = !getApps().length && isConfigValid ? initializeApp(firebaseConfig) : (getApps().length ? getApp() : null);
 const auth = app ? getAuth(app) : null as any;
-const db = app ? getFirestore(app, (firebaseConfig as any).databaseId) : null as any;
+const db = app
+  ? (firebaseConfig.databaseId
+      ? getFirestore(app, firebaseConfig.databaseId)
+      : getFirestore(app))
+  : null as any;
 
 if (db) {
   // Enable offline persistence

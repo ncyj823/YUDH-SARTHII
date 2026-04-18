@@ -16,8 +16,22 @@ View your app in AI Studio: https://ai.studio/apps/53b75f8e-61c4-4de4-adcf-f458a
 1. Install dependencies:
    `npm install`
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+3. Add Firebase web config in `.env.local`:
+   - `VITE_FIREBASE_API_KEY`
+   - `VITE_FIREBASE_AUTH_DOMAIN`
+   - `VITE_FIREBASE_PROJECT_ID`
+   - `VITE_FIREBASE_STORAGE_BUCKET`
+   - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+   - `VITE_FIREBASE_APP_ID`
+   - Optional: `VITE_MAPBOX_TOKEN`
+4. Run the app:
    `npm run dev`
+
+## If You See "Firebase Not Configured"
+
+Your `firebase-applet-config.json` is currently empty in this repo, so the app expects Firebase values from environment variables at build time.
+
+For deployed hosting, add the same `VITE_FIREBASE_*` variables in your hosting/build environment and redeploy.
 
 ## Deploy To Firebase Hosting
 
