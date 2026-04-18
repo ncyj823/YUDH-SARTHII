@@ -1,0 +1,7 @@
+{
+  "name": "Yudh Sarthi",
+  "description": "A secure, offline-first platform for crisis management, providing citizens with safety maps, verification, and government-led relief coordination.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

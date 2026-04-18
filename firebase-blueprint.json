@@ -1,0 +1,110 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores citizen and authority profile information.",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "description": "Full name of the user" },
+        "idType": { "type": "string", "enum": ["aadhar", "pan"], "description": "Type of ID provided" },
+        "idNumber": { "type": "string", "description": "ID number (Aadhar or PAN)" },
+        "isVerified": { "type": "boolean", "description": "Whether the user is verified by authority" },
+        "role": { "type": "string", "enum": ["citizen", "authority"], "description": "User role" },
+        "familyMembers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "fullName": { "type": "string" },
+              "relation": { "type": "string" },
+              "idType": { "type": "string" },
+              "idNumber": { "type": "string" },
+              "isVerified": { "type": "boolean" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fullName", "idType", "idNumber", "role"]
+    },
+    "Zone": {
+      "title": "Crisis Zone",
+      "description": "Areas marked with safety status.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "status": { "type": "string", "enum": ["safe", "warring", "danger"] },
+        "description": { "type": "string" },
+        "location": { "type": "string" },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lat": { "type": "number" },
+              "lng": { "type": "number" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Resource": {
+      "title": "Supply Resource",
+      "description": "Emergency supply centers like shelters, medical, food.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["shelter", "medical", "food"] },
+        "description": { "type": "string" },
+        "location": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Poll": {
+      "title": "Government Poll",
+      "description": "Polls created by authorities to gather feedback.",
+      "type": "object",
+      "properties": {
+        "question": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "active": { "type": "boolean" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "PollResponse": {
+      "title": "Poll Response",
+      "description": "User responses to polls.",
+      "type": "object",
+      "properties": {
+        "pollId": { "type": "string" },
+        "userId": { "type": "string" },
+        "optionIndex": { "type": "integer" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ActivityLog": {
+      "title": "Activity Log",
+      "description": "Logs of authority actions.",
+      "type": "object",
+      "properties": {
+        "action": { "type": "string" },
+        "actor": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profile data" },
+    "/zones/{zoneId}": { "schema": "Zone", "description": "Crisis zones" },
+    "/resources/{resourceId}": { "schema": "Resource", "description": "Supply resources" },
+    "/polls/{pollId}": { "schema": "Poll", "description": "Government polls" },
+    "/pollResponses/{responseId}": { "schema": "PollResponse", "description": "User poll responses" },
+    "/activityLog/{logId}": { "schema": "ActivityLog", "description": "Authority activity logs" }
+  }
+}
