@@ -35,6 +35,11 @@ export default function App() {
   const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
 
   useEffect(() => {
+    if (!auth || !db) {
+      setIsLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         try {
@@ -83,6 +88,10 @@ export default function App() {
   };
 
   const setupRecaptcha = () => {
+    if (!auth) {
+      throw new Error('Firebase auth is not configured.');
+    }
+
     if (!recaptchaVerifierRef.current) {
       recaptchaVerifierRef.current = new RecaptchaVerifier(auth, 'recaptcha-container', {
         size: 'invisible',
